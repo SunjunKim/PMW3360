@@ -1,10 +1,12 @@
-= PMW3360 Module Library for Arduino =
+# PMW3360 Module Library for Arduino
 
 This library allows an Arduino board to easily communicate with PMW3360 Module.
 This library is designed for https://www.tindie.com/products/jkicklighter/pmw3360-motion-sensor/
 However, other setup will also work.
 
 For the most basic example, please take look at [basic_polling] example.
+[basic_interrupt] example is using movement interrupt pin (MT) on the module. It does SPI transmission only if any movement is detects.
+[HID_mouse] example will work as a regular mouse with left/right buttons.
 
 PMW3360 class has following functions:
 
