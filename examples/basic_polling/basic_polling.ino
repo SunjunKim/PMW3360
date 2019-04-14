@@ -12,6 +12,7 @@
   * GD = Ground
   * VI = Voltage in up to +5.5V 
 
+Module   Arduino
   RS --- (NONE)
   GD --- GND
   MT --- (NONE)
