@@ -1,4 +1,4 @@
-= PMW3360 Module Library for Arduino =
+# PMW3360 Module Library for Arduino
 
 This library allows an Arduino board to easily communicate with PMW3360 Module.
 This library is designed for https://www.tindie.com/products/jkicklighter/pmw3360-motion-sensor/
