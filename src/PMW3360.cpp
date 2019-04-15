@@ -20,13 +20,13 @@
 
 #include "PMW3360.h"
 
-#define BEGIN_COM digitalWrite(_ss, LOW)
-#define END_COM   digitalWrite(_ss, HIGH)
+#define BEGIN_COM digitalWrite(_ss, LOW); delayMicroseconds(1)
+#define END_COM   delayMicroseconds(1); digitalWrite(_ss, HIGH)
 #define SPI_BEGIN SPI.beginTransaction(SPISettings(8000000, MSBFIRST, SPI_MODE3))
 #define SPI_END   SPI.endTransaction()
 
 const unsigned short firmware_length = 4094;
-const unsigned char firmware_data[] PROGMEM = {
+const unsigned char firmware_data[] PROGMEM = {    // SROM 0x04
 0x01, 0x04, 0x8e, 0x96, 0x6e, 0x77, 0x3e, 0xfe, 0x7e, 0x5f, 0x1d, 0xb8, 0xf2, 0x66, 0x4e, 
 0xff, 0x5d, 0x19, 0xb0, 0xc2, 0x04, 0x69, 0x54, 0x2a, 0xd6, 0x2e, 0xbf, 0xdd, 0x19, 0xb0, 
 0xc3, 0xe5, 0x29, 0xb1, 0xe0, 0x23, 0xa5, 0xa9, 0xb1, 0xc1, 0x00, 0x82, 0x67, 0x4c, 0x1a, 
@@ -309,7 +309,7 @@ PMW3360::PMW3360()
 }
 
 // public
-void PMW3360::begin(unsigned int ss_pin, unsigned int CPI)
+bool PMW3360::begin(unsigned int ss_pin, unsigned int CPI)
 {
   _ss = ss_pin;
   _inBurst = false;
@@ -332,10 +332,8 @@ void PMW3360::begin(unsigned int ss_pin, unsigned int CPI)
   BEGIN_COM;
   delayMicroseconds(40);
   END_COM;
-  SPI_END;
   delayMicroseconds(40);
-  
-  SPI_BEGIN;
+
   adns_write_reg(REG_Power_Up_Reset, 0x5a); // force reset
   SPI_END;
   delay(50); // wait for it to reboot
@@ -354,6 +352,8 @@ void PMW3360::begin(unsigned int ss_pin, unsigned int CPI)
   
   delay(10);
   setCPI(CPI);
+
+  return check_signature();
 }
 
 // public
@@ -463,11 +463,10 @@ byte PMW3360::adns_read_reg(byte reg_addr) {
   BEGIN_COM;
   // send adress of the register, with MSBit = 0 to indicate it's a read
   SPI.transfer(reg_addr & 0x7f );
-  delayMicroseconds(35); // tSRAD
+  delayMicroseconds(100); // tSRAD is 25, but 100us seems to be stable.
   // read data
   byte data = SPI.transfer(0);
 
-  delayMicroseconds(1); // tSCLK-NCS for read operation is 120ns
   END_COM;
   delayMicroseconds(19); //  tSRW/tSRR (=20us) minus tSCLK-NCS
 
@@ -525,4 +524,16 @@ void PMW3360::adns_upload_firmware() {
   adns_write_reg(REG_Config2, 0x00);
 
   END_COM;
+}
+
+bool PMW3360::check_signature() {
+  SPI_BEGIN;
+  
+  byte pid = adns_read_reg(REG_Product_ID);
+  byte iv_pid = adns_read_reg(REG_Inverse_Product_ID);
+  byte SROM_ver = adns_read_reg(REG_SROM_ID);
+
+  SPI_END;
+
+  return (pid==0x42 && iv_pid == 0xBD && SROM_ver == 0x04); // signature for SROM 0x04
 }

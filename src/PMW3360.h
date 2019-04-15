@@ -129,13 +129,14 @@ class PMW3360
 {
 public:
   PMW3360();  // set CPI to 800 by default.
-  void begin(unsigned int ss_pin, unsigned int CPI = 800);
+  bool begin(unsigned int ss_pin, unsigned int CPI = 800);
   void setCPI(unsigned int newCPI);
   unsigned int getCPI();
   PMW3360_DATA readBurst();
   byte readReg(byte reg_addr);
   void writeReg(byte reg_addr, byte data);
-
+  bool check_signature();
+  
 private:
   unsigned int _ss;
   bool _inBurst = false;
@@ -143,6 +144,7 @@ private:
   byte adns_read_reg(byte reg_addr);
   void adns_write_reg(byte reg_addr, byte data);
   void adns_upload_firmware();
+  
 };
 //extern AdvMouse_ AdvMouse;
 
