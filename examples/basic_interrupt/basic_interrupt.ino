@@ -47,12 +47,14 @@ void setup() {
   Serial.begin(9600);  
   while(!Serial);
   
-  //sensor.setCPI(1600);    // or, you can set CPI later by calling setCPI();
+  //sensor.begin(10, 1600); // to set CPI (Count per Inch), pass it as the second parameter
   if(sensor.begin(SS))  // 10 is the pin connected to SS of the module.
     Serial.println("Sensor initialization successed");
   else
-    Serial.println("Sensor initialization failed");//sensor.begin(10, 1600); // to set CPI (Count per Inch), pass it as the second parameter
+    Serial.println("Sensor initialization failed");
 
+  //sensor.setCPI(1600);    // or, you can set CPI later by calling setCPI();
+  
   pinMode(MOT, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(MOT), motionDetected, FALLING);
 
