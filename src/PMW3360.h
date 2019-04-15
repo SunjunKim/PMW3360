@@ -135,8 +135,7 @@ public:
   PMW3360_DATA readBurst();
   byte readReg(byte reg_addr);
   void writeReg(byte reg_addr, byte data);
-  bool check_signature();
-  
+
 private:
   unsigned int _ss;
   bool _inBurst = false;
@@ -144,7 +143,7 @@ private:
   byte adns_read_reg(byte reg_addr);
   void adns_write_reg(byte reg_addr, byte data);
   void adns_upload_firmware();
-  
+  bool check_signature();  
 };
 //extern AdvMouse_ AdvMouse;
 
