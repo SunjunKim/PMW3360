@@ -8,8 +8,7 @@ For the most basic example, please take look at [basic_polling] example.
 [basic_interrupt] example is using movement interrupt pin (MT) on the module. It does SPI transmission only if any movement is detects.
 [HID_mouse] example will work as a regular mouse with left/right buttons.
 
-PMW3360 class has following functions:
-
+# PMW3360 class
 * void begin(unsigned int ss_pin, unsigned int CPI = 800)
   * Initialize the sensor. ss_pin is Slave Select pin on the module. Optionally CPI value can be set.
 * void setCPI(unsigned int newCPI); / unsigned int getCPI();
@@ -37,7 +36,7 @@ PMW3360 class has following functions:
 
 Disclaimer: some part of the code is based on https://github.com/mrjohnk/PMW3360DM-T2QU
 
-== License ==
+# License
 
 Copyright (c) Sunjun Kim. All right reserved.
 
@@ -54,3 +53,11 @@ Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+
+# Update log
+* v1.0.0
+  * Initial release
+
+# v1.0.1
+  * Bug fix on register reading (timing stabilized)
+  * Sensor initialization check routine added. (begin() will return false if failed)
