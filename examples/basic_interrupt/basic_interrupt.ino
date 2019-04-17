@@ -37,7 +37,7 @@ Module   Arduino
  */
 
 
-#define MOT 2   // motion interrupt pin, connet this pin to MT on the module.
+#define MOT 2   // motion interrupt pin, connect this pin to MT on the module.
 #define SS  10   // Slave Select pin. Connect this to SS on the module.
 
 PMW3360 sensor;
