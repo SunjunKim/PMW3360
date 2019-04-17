@@ -1,7 +1,7 @@
 #include <PMW3360.h>
 #include <Mouse.h>
 
-// WARNING: This example works only in Native USB compatible boards (e.g., Micro, Leonardo, etc.)
+// WARNING: This example works only in Native USB supporting boards (e.g., Micro, Leonardo, etc.)
 
 /* 
 # PIN CONNECTION
@@ -65,10 +65,19 @@ unsigned long lastButtonCheck = 0;
 
 void setup() {
   Serial.begin(9600);  
-  sensor.begin(SS);  // 10 is the pin connected to SS of the module.
+  
+  // With this line, your arduino will wait until a serial communication begin.
+  // If you want your mouse application to work as soon as plug-in the USB, remove this line.
+  while(!Serial); 
+
   //sensor.begin(10, 1600); // to set CPI (Count per Inch), pass it as the second parameter
+  if(sensor.begin(SS))  // 10 is the pin connected to SS of the module.
+    Serial.println("Sensor initialization successed");
+  else
+    Serial.println("Sensor initialization failed");
   sensor.setCPI(1600);    // or, you can set CPI later by calling setCPI();
 
+  Mouse.begin();
   buttons_init();
 }
 
