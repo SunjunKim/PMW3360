@@ -304,11 +304,19 @@ const unsigned char firmware_data[] PROGMEM = {    // SROM 0x04
 //================================================================================
 //	PMW3360 Motion Sensor Module
 
+// bascially do nothing here
 PMW3360::PMW3360() 
 {
 }
 
 // public
+/* 
+begin: initalize variables, prepare the sensor to be init.
+
+# parameter
+ss_pin: The arduino pin that is connected to slave select on the module.
+CPI: initial CPI. optional.
+*/
 bool PMW3360::begin(unsigned int ss_pin, unsigned int CPI)
 {
   _ss = ss_pin;
@@ -357,6 +365,12 @@ bool PMW3360::begin(unsigned int ss_pin, unsigned int CPI)
 }
 
 // public
+/* 
+setCPI: set CPI level of the motion sensor.
+
+# parameter
+cpi: Count per Inch value
+*/
 void PMW3360::setCPI(unsigned int cpi)
 {
   int cpival = constrain((cpi/100)-1, 0, 0x77); // limits to 0--119 
@@ -368,6 +382,12 @@ void PMW3360::setCPI(unsigned int cpi)
 }
 
 // public
+/* 
+getCPI: get CPI level of the motion sensor.
+
+# retrun
+cpi: Count per Inch value
+*/
 unsigned int PMW3360::getCPI()
 {
   SPI_BEGIN;
@@ -378,6 +398,12 @@ unsigned int PMW3360::getCPI()
 }
 
 // public
+/* 
+readBurst: get one frame of motion data. 
+
+# retrun
+type: PMW3360_DATA
+*/
 PMW3360_DATA PMW3360::readBurst()
 {  
   unsigned long fromLast = micros() - _lastBurst;
@@ -438,6 +464,14 @@ PMW3360_DATA PMW3360::readBurst()
 }
 
 // public
+/* 
+readReg: get one byte value from the given reg_addr.
+
+# parameter
+reg_addr: the register address
+# retrun
+byte value on the register.
+*/
 byte PMW3360::readReg(byte reg_addr)
 {
   SPI_BEGIN;
@@ -447,6 +481,13 @@ byte PMW3360::readReg(byte reg_addr)
 }
 
 // public
+/* 
+writeReg: write one byte value to the given reg_addr.
+
+# parameter
+reg_addr: the register address
+data: byte value to be pass to the register.
+*/
 void PMW3360::writeReg(byte reg_addr, byte data)
 {
   SPI_BEGIN;
@@ -454,6 +495,9 @@ void PMW3360::writeReg(byte reg_addr, byte data)
   SPI_END;
 }
 
+/* 
+adns_read_reg: write one byte value to the given reg_addr.
+*/
 byte PMW3360::adns_read_reg(byte reg_addr) {
   if(reg_addr != REG_Motion_Burst)
   {
@@ -473,6 +517,9 @@ byte PMW3360::adns_read_reg(byte reg_addr) {
   return data;
 }
 
+/* 
+adns_write_reg: write one byte value to the given reg_addr
+*/
 void PMW3360::adns_write_reg(byte reg_addr, byte data) {
   if(reg_addr != REG_Motion_Burst)
   {
@@ -490,6 +537,9 @@ void PMW3360::adns_write_reg(byte reg_addr, byte data) {
   delayMicroseconds(100); // tSWW/tSWR (=120us) minus tSCLK-NCS. Could be shortened, but is looks like a safe lower bound
 }
 
+/* 
+adns_upload_firmware: load SROM content to the motion sensor
+*/
 void PMW3360::adns_upload_firmware() {
   //Write 0 to Rest_En bit of Config2 register to disable Rest mode.
   adns_write_reg(REG_Config2, 0x00);
@@ -526,6 +576,11 @@ void PMW3360::adns_upload_firmware() {
   END_COM;
 }
 
+/* 
+check_signature: check whether SROM is successfully loaded
+
+return: true if the rom is loaded correctly.
+*/
 bool PMW3360::check_signature() {
   SPI_BEGIN;
   
@@ -536,4 +591,39 @@ bool PMW3360::check_signature() {
   SPI_END;
 
   return (pid==0x42 && iv_pid == 0xBD && SROM_ver == 0x04); // signature for SROM 0x04
+}
+
+/* 
+prepareImage: prepare a raw image capture from the snesor
+*/
+void PMW3360::prepareImage()
+{
+  SPI_BEGIN;
+
+  adns_write_reg(REG_Config2, 0x00);
+
+  adns_write_reg(REG_Frame_Capture, 0x83);
+  adns_write_reg(REG_Frame_Capture, 0xc5);  
+
+  delay(20);
+
+  BEGIN_COM;
+  SPI.transfer(REG_Raw_Data_Burst & 0x7f);
+  delayMicroseconds(20);  
+}
+/* 
+readImagePixel: prepare a raw image capture from the snesor
+*/
+byte PMW3360::readImagePixel()
+{
+  byte pixel = SPI.transfer(0);
+  delayMicroseconds(20);
+
+  return pixel;
+}
+
+void PMW3360::endImage()
+{
+  END_COM;
+  SPI_END;
 }

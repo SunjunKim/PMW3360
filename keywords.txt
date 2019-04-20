@@ -17,6 +17,9 @@ getCPI		KEYWORD2
 readBurst	KEYWORD2
 readReg  	KEYWORD2
 writeReg  	KEYWORD2
+prepareImage 	KEYWORD2
+readImagePixel 	KEYWORD2
+endImage 		KEYWORD2
 
 #######################################
 # Constants (LITERAL1)

@@ -129,12 +129,18 @@ class PMW3360
 {
 public:
   PMW3360();  // set CPI to 800 by default.
-  bool begin(unsigned int ss_pin, unsigned int CPI = 800);
+  // begin: initialize the module, ss_pin: slave select pin, CPI: initial Count Per Inch
+  bool begin(unsigned int ss_pin, unsigned int CPI = 800);    
+  // setCPI: set Count Per Inch value
   void setCPI(unsigned int newCPI);
+  // setCPI: get CPI value (it does read CPI register from the module)
   unsigned int getCPI();
   PMW3360_DATA readBurst();
   byte readReg(byte reg_addr);
   void writeReg(byte reg_addr, byte data);
+  void prepareImage();
+  byte readImagePixel();
+  void endImage();
 
 private:
   unsigned int _ss;
