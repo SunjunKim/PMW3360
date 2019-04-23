@@ -41,7 +41,7 @@ Module   Arduino
 #define SS  10   // Slave Select pin. Connect this to SS on the module.
 
 PMW3360 sensor;
-bool motion = false;
+volatile bool motion = false;
 
 void setup() {
   Serial.begin(9600);  

@@ -34,7 +34,8 @@ For the most basic example, please take look at [basic_polling] example.
   * Write register value to the module.
 
 
-Disclaimer: some part of the code is based on https://github.com/mrjohnk/PMW3360DM-T2QU
+Notice: some part of the code is based on https://github.com/mrjohnk/PMW3360DM-T2QU
+Disclaimer: This is not a PixArt official library. USE AT YOUR OWN RISK.
 
 # License
 
@@ -58,6 +59,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 * v1.0.0
   * Initial release
 
-# v1.0.1
+* v1.0.1
   * Bug fix on register reading (timing stabilized)
   * Sensor initialization check routine added. (begin() will return false if failed)
+
+* v1.1.0
+  * Raw frame capture functions are updated (prepareImage, readImagePixel, endImage).
+  * 'Camera' example is added
+
