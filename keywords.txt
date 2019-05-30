@@ -5,23 +5,23 @@
 #######################################
 # Datatypes (KEYWORD1)
 #######################################
-PMW3360		 KEYWORD1
-PMW3360_DATA KEYWORD1
+PMW3360	KEYWORD1
+PMW3360_DATA	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
-begin		KEYWORD2
-setCPI		KEYWORD2
-getCPI		KEYWORD2
+begin	KEYWORD2
+setCPI	KEYWORD2
+getCPI	KEYWORD2
 readBurst	KEYWORD2
-readReg  	KEYWORD2
-writeReg  	KEYWORD2
-prepareImage 	KEYWORD2
-readImagePixel 	KEYWORD2
-endImage 		KEYWORD2
+readReg	KEYWORD2
+writeReg	KEYWORD2
+prepareImage	KEYWORD2
+readImagePixel	KEYWORD2
+endImage	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
 #######################################
-# MOUSE_LEFT		LITERAL1
+# MOUSE_LEFT	LITERAL1
