@@ -436,8 +436,8 @@ PMW3360_DATA PMW3360::readBurst()
 
   PMW3360_DATA data;
 
-  bool motion = (burstBuffer[0] & 0x80) != 0;
-  bool surface = (burstBuffer[0] & 0x08) == 0;   // 0 if on surface / 1 if off surface
+  data.isMotion = (burstBuffer[0] & 0x80) != 0;
+  data.isOnSurface = (burstBuffer[0] & 0x08) == 0;   // 0 if on surface / 1 if off surface
 
   uint8_t xl = burstBuffer[2];    // dx LSB
   uint8_t xh = burstBuffer[3];    // dx MSB
@@ -446,19 +446,14 @@ PMW3360_DATA PMW3360::readBurst()
   uint8_t sl = burstBuffer[10];   // shutter LSB
   uint8_t sh = burstBuffer[11];   // shutter MSB
   
-  int16_t x = xh<<8 | xl;
-  int16_t y = yh<<8 | yl;
-  unsigned int shutter = sh<<8 | sl;
+  data.dx = xh<<8 | xl;
+  data.dy = yh<<8 | yl;
+  data.shutter = sh<<8 | sl;
 
-  data.isMotion = motion;
-  data.isOnSurface = surface;
-  data.dx = x;
-  data.dy = y;
   data.SQUAL = burstBuffer[6];
   data.rawDataSum = burstBuffer[7];
   data.maxRawData = burstBuffer[8];
   data.minRawData = burstBuffer[9];
-  data.shutter = shutter;
 
   return data;
 }
