@@ -446,8 +446,8 @@ PMW3360_DATA PMW3360::readBurst()
   uint8_t sl = burstBuffer[10];   // shutter LSB
   uint8_t sh = burstBuffer[11];   // shutter MSB
   
-  int x = xh<<8 | xl;
-  int y = yh<<8 | yl;
+  int16_t x = xh<<8 | xl;
+  int16_t y = yh<<8 | yl;
   unsigned int shutter = sh<<8 | sl;
 
   data.isMotion = motion;
