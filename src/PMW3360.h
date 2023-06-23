@@ -116,8 +116,8 @@ struct PMW3360_DATA
 {
  bool isMotion;        // True if a motion is detected. 
  bool isOnSurface;     // True when a chip is on a surface 
- int dx;               // displacement on x directions. Unit: Count. (CPI * Count = Inch value)
- int dy;               // displacement on y directions.
+ int16_t dx;           // displacement on x directions. Unit: Count. (CPI * Count = Inch value)
+ int16_t dy;           // displacement on y directions.
  byte SQUAL;           // Surface Quality register, max 0x80. Number of features on the surface = SQUAL * 8
  byte rawDataSum;      // It reports the upper byte of an 18‐bit counter which sums all 1296 raw data in the current frame; * Avg value = Raw_Data_Sum * 1024 / 1296
  byte maxRawData;      // Max raw data value in current frame, max=127
